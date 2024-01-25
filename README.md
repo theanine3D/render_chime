@@ -8,7 +8,7 @@ Render Chime is a Blender (2.8x / 3.x / 4.x) addon that plays a sound effect whe
  
 ## Notes
 - You may set a custom sound file (must be .wav format) in the addon's preferences, which can be accessed in the same preferences panel where you enable the addon.
-- Linux users must have at least 1 of the following audio packages installed in your distribution: PulseAudio, ALSA, or beep. The addon will attempt to play a sound using these packages in this order, using 'beep' as a fallback if the first two fail.
+- Linux users must have at least 1 of the following audio packages installed in your distribution: PulseAudio, ALSA, or beep. The addon will attempt to play a sound using these packages in this order, using 'beep' as a fallback if the first two fail. If you hear no sound, check to make sure that the "paplay", "aplay", or "beep" commands are working properly via the command line.
 
 ## Installation
 1. Press the big green Code button above and choose "Download ZIP"
