@@ -1,5 +1,5 @@
 # Render Chime
-Render Chime is a Blender (2.8x+ / 3.x / 4.x) addon that plays a sound effect when your render or bake task has completed.
+Render Chime is a Blender (3.x / 4.x) addon that plays a sound effect when your render or bake task has completed.
 
 ## Features
 - Sound effect is customizeable. Most .WAV files should work.
