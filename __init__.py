@@ -1,15 +1,19 @@
-bl_info = {
-    "name": "Render Chime",
-    "blender": (2, 80, 0),
-    "category": "Render",
-    "version": (1, 0, 0),
-    "author": "Theanine3D",
-    "description": "Plays a chime after rendering."
-}
-
 import bpy
 import os
 import platform
+from bpy.app.handlers import persistent
+
+
+bl_info = {
+    "name": "Render Chime",
+    "blender": (2, 80, 0),
+    "author": "Theanine3D",
+    "category": "Render",
+    "version": (1, 0, 0),
+    "author": "Theanine3D",
+    "description": "Plays a chime after rendering.",
+    "support": "COMMUNITY"
+}
 
 try:
     import winsound
@@ -55,6 +59,7 @@ def get_default_sound_path():
     default_sound_path = os.path.join(addon_path, "default.wav")
     return default_sound_path if os.path.exists(default_sound_path) else None
 
+@persistent
 def render_complete(scene, context):
     user_preferences = bpy.context.preferences
     addon_prefs = user_preferences.addons[__name__].preferences
@@ -82,13 +87,20 @@ class RenderChimePreferences(bpy.types.AddonPreferences):
 
 def register():
     bpy.utils.register_class(RenderChimePreferences)
-    bpy.app.handlers.render_complete.append(render_complete)
-    bpy.app.handlers.object_bake_complete.append(render_complete)
+    if render_complete not in bpy.app.handlers.render_complete:
+        bpy.app.handlers.render_complete.append(render_complete)
+    if bpy.app.version >= (3, 0, 0):
+        if render_complete not in bpy.app.handlers.object_bake_complete:
+            bpy.app.handlers.object_bake_complete.append(render_complete)
 
 def unregister():
     bpy.utils.unregister_class(RenderChimePreferences)
-    bpy.app.handlers.render_complete.remove(render_complete)
-    bpy.app.handlers.object_bake_complete.remove(render_complete)
+    if render_complete in bpy.app.handlers.render_complete:
+        bpy.app.handlers.render_complete.remove(render_complete)
+    if bpy.app.version >= (3, 0, 0):
+        if render_complete in bpy.app.handlers.object_bake_complete:
+            bpy.app.handlers.object_bake_complete.remove(render_complete)
 
 if __name__ == "__main__":
     register()
+
