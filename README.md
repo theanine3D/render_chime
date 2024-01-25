@@ -1,4 +1,4 @@
-![Untitled](https://github.com/theanine3D/render_chime/assets/88953117/a5f20952-b2e0-4752-84dd-b0c78359820d)
+<p align="center"><img src="https://github.com/theanine3D/render_chime/assets/88953117/a5f20952-b2e0-4752-84dd-b0c78359820d" width="250"></center>
 
 # Render Chime
 
