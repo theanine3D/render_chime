@@ -9,7 +9,7 @@ bl_info = {
     "blender": (2, 80, 0),
     "author": "Theanine3D",
     "category": "Render",
-    "version": (1, 0, 0),
+    "version": (1, 1, 0),
     "author": "Theanine3D",
     "description": "Plays a chime after rendering.",
     "support": "COMMUNITY"
@@ -59,11 +59,14 @@ def get_default_sound_path():
     default_sound_path = os.path.join(addon_path, "default.wav")
     return default_sound_path if os.path.exists(default_sound_path) else None
 
-@persistent
-def render_complete(scene, context):
+def get_sound_path():
     user_preferences = bpy.context.preferences
     addon_prefs = user_preferences.addons[__name__].preferences
-    sound_file_path = addon_prefs.sound_file_path if addon_prefs.sound_file_path else get_default_sound_path()
+    return addon_prefs.sound_file_path if addon_prefs.sound_file_path else get_default_sound_path()
+
+@persistent
+def render_complete(scene, context):
+    sound_file_path = get_sound_path()
     play_chime(sound_file_path)
 
 class RenderChimePreferences(bpy.types.AddonPreferences):
@@ -85,21 +88,50 @@ class RenderChimePreferences(bpy.types.AddonPreferences):
         layout = self.layout
         layout.prop(self, "sound_file_path")
 
+class ViewportRenderChime(bpy.types.Operator):
+    """Performs a viewport render with animation enabled, but with a sound effect played when the render finishes"""
+    bl_idname = "render.viewport_render_chime"
+    bl_label = "Viewport Render Animation (Chime)"
+    bl_options = {'REGISTER'}
+
+    def execute(self, context):
+        bpy.ops.render.opengl(animation=True)
+
+        sound_file_path = get_sound_path()
+        play_chime(sound_file_path)
+
+        return {'FINISHED'}
+
+classes = (
+    RenderChimePreferences,
+    ViewportRenderChime
+)
+
+def menu_func(self, context):
+    self.layout.operator(ViewportRenderChime.bl_idname)
+
 def register():
-    bpy.utils.register_class(RenderChimePreferences)
+    for cls in classes:
+        bpy.utils.register_class(cls)
+
     if render_complete not in bpy.app.handlers.render_complete:
         bpy.app.handlers.render_complete.append(render_complete)
     if bpy.app.version >= (3, 0, 0):
         if render_complete not in bpy.app.handlers.object_bake_complete:
             bpy.app.handlers.object_bake_complete.append(render_complete)
+    bpy.types.VIEW3D_MT_view.append(menu_func)
 
 def unregister():
+    for cls in classes:
+        bpy.utils.unregister_class(cls)
+
     bpy.utils.unregister_class(RenderChimePreferences)
     if render_complete in bpy.app.handlers.render_complete:
         bpy.app.handlers.render_complete.remove(render_complete)
     if bpy.app.version >= (3, 0, 0):
         if render_complete in bpy.app.handlers.object_bake_complete:
             bpy.app.handlers.object_bake_complete.remove(render_complete)
+    bpy.types.VIEW3D_MT_view.remove(menu_func)
 
 if __name__ == "__main__":
     register()
