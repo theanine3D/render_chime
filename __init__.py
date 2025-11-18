@@ -9,7 +9,7 @@ bl_info = {
     "blender": (2, 80, 0),
     "author": "Theanine3D",
     "category": "Render",
-    "version": (1, 1, 0),
+    "version": (1, 1, 1),
     "author": "Theanine3D",
     "description": "Plays a chime after rendering.",
     "support": "COMMUNITY"
@@ -125,7 +125,6 @@ def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
 
-    bpy.utils.unregister_class(RenderChimePreferences)
     if render_complete in bpy.app.handlers.render_complete:
         bpy.app.handlers.render_complete.remove(render_complete)
     if bpy.app.version >= (3, 0, 0):
