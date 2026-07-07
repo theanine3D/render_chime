@@ -1,0 +1,19 @@
+schema_version = "1.0.0"
+
+id = "render_chime"
+version = "1.2.0"
+name = "Render Chime"
+tagline = "Play a custom sound effect when a render or bake are completed"
+maintainer = "Theanine3D <theanine3d@gmail.com>"
+
+type = "add-on"
+
+website = "https://github.com/theanine3D/render_chime"
+
+tags = ["Render", "Bake"]
+
+blender_version_min = "4.2.0"
+
+license = ["SPDX:GPL-3.0-or-later"]
+
+copyright = ["2026 Pedro Valencia Oseguera"]
